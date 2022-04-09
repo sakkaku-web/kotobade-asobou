@@ -22,6 +22,7 @@ export default {
             sourcemap: true,
         },
     ],
+    external: ["react", "react-dom"],
     plugins: [
         del({ targets: 'dist/*' }),
         peerDepsExternal(),
@@ -31,7 +32,19 @@ export default {
             tsconfig: 'tsconfig.build.json',
             useTsconfigDeclarationDir: true,
         }),
-        postcss(),
+        postcss({
+            // minimize: true,
+            // modules: true,
+            // extract: true,
+            config: {
+                path: "./postcss.config.js",
+            },
+            extensions: [".css"],
+            minimize: true,
+            inject: {
+                insertAt: "top",
+            },
+        }),
         terser(),
     ],
 };

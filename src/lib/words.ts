@@ -1,5 +1,5 @@
-import { WORDS } from '../constants/wordlist'
-import { VALID_GUESSES } from '../constants/validGuesses'
+// import { WORDS } from '../constants/wordlist'
+// import { VALID_GUESSES } from '../constants/validGuesses'
 import { t } from '../constants/strings'
 import { getGuessStatuses } from './statuses'
 import { getStoredTimezone } from './localStorage'
@@ -7,10 +7,11 @@ import { DateTime } from 'luxon'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
 
 export const isWordInWordList = (word: string) => {
-  return (
-    WORDS.includes(localeAwareLowerCase(word)) ||
-    VALID_GUESSES.includes(localeAwareLowerCase(word))
-  )
+  return false;
+  // (
+  //   WORDS.includes(localeAwareLowerCase(word)) ||
+  //   VALID_GUESSES.includes(localeAwareLowerCase(word))
+  // )
 }
 
 export const isWinningWord = (word: string) => {
@@ -95,9 +96,11 @@ export const getWordOfDay = () => {
   const yesterdayIndex = (index > 0 ? index - 1 : 0)
 
   return {
-    yesterdaySolution: localeAwareUpperCase(WORDS[yesterdayIndex % WORDS.length]),
+    // yesterdaySolution: localeAwareUpperCase(WORDS[yesterdayIndex % WORDS.length]),
+    yesterdaySolution: '',
     yesterdaySolutionIndex: yesterdayIndex,
-    solution: localeAwareUpperCase(WORDS[index % WORDS.length]),
+    // solution: localeAwareUpperCase(WORDS[index % WORDS.length]),
+    solution: '',
     solutionIndex: index,
     tomorrow: tomorrow,
   }

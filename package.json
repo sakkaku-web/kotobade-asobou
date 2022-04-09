@@ -1,6 +1,6 @@
 {
   "name": "@sakkaku-web/kotobade-asobou",
-  "version": "2.3.10",
+  "version": "2.3.16",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "private": false,
@@ -17,6 +17,10 @@
     "registry": "https://registry.npmjs.org/"
   },
   "homepage": "https://github.com/sakkaku-web/kotobade-asobou",
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
   "dependencies": {
     "@headlessui/react": "^1.4.2",
     "@heroicons/react": "^1.0.5",
