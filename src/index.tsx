@@ -4,11 +4,12 @@ import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { AlertProvider } from './context/AlertContext'
+import { Game } from './game-components/Game'
 
 ReactDOM.render(
   <React.StrictMode>
     <AlertProvider>
-      <App />
+      <Game word="おおああええ" maxAttempts={5} />
     </AlertProvider>
   </React.StrictMode>,
   document.getElementById('root')

@@ -1,4 +1,4 @@
-import { MAX_CHALLENGES } from '../../constants/settings'
+import { MAX_CHALLENGES, MAX_WORD_LENGTH } from '../../constants/settings'
 import { CompletedRow } from './CompletedRow'
 import { CurrentRow } from './CurrentRow'
 import { EmptyRow } from './EmptyRow'
@@ -8,6 +8,8 @@ type Props = {
   currentGuess: string
   isRevealing?: boolean
   currentRowClassName: string
+  maxRows?: number
+  columns?: number
 }
 
 export const Grid = ({
@@ -15,15 +17,20 @@ export const Grid = ({
   currentGuess,
   isRevealing,
   currentRowClassName,
+  maxRows,
+  columns,
 }: Props) => {
+  const rows = maxRows || MAX_CHALLENGES
+  const cols = columns || MAX_WORD_LENGTH
+
   const empties =
-    guesses.length < MAX_CHALLENGES - 1
-      ? Array.from(Array(MAX_CHALLENGES - 1 - guesses.length))
+    guesses.length < rows - 1
+      ? Array.from(Array(rows - 1 - guesses.length))
       : []
 
   return (
-    <div className='flex justify-center pb-1 md:pb-2'>
-      <div className="grid grid-rows-6 grid-flow-col">
+    <div className="flex justify-center pb-1 md:pb-2">
+      <div className="grid grid-flow-row">
         {guesses.map((guess, i) => (
           <CompletedRow
             key={i}
@@ -31,11 +38,15 @@ export const Grid = ({
             isRevealing={isRevealing && guesses.length - 1 === i}
           />
         ))}
-        {guesses.length < MAX_CHALLENGES && (
-          <CurrentRow guess={currentGuess} className={currentRowClassName} />
+        {guesses.length < rows && (
+          <CurrentRow
+            guess={currentGuess}
+            className={currentRowClassName}
+            columns={cols}
+          />
         )}
         {empties.map((_, i) => (
-          <EmptyRow key={i} />
+          <EmptyRow key={i} columns={cols} />
         ))}
       </div>
     </div>
