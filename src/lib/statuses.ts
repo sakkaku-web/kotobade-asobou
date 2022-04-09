@@ -63,8 +63,8 @@ export const getStatuses = (
   return charObj
 }
 
-export const getGuessStatuses = (guess: string): CharStatus[] => {
-  const splitSolution = unicodeSplit(solution)
+export const getGuessStatuses = (guess: string, word: string = solution): CharStatus[] => {
+  const splitSolution = unicodeSplit(word)
   const splitGuess = unicodeSplit(guess)
 
   const solutionCharsTaken = splitSolution.map((_) => false)

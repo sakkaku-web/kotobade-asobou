@@ -14,6 +14,7 @@ import { unicodeLength } from '../lib/words'
 import GraphemeSplitter from 'grapheme-splitter'
 import { toHiragana } from '@koozaki/romaji-conv'
 import { REVEAL_TIME_MS } from '../constants/settings'
+import { AlertContainer } from '../components/alerts/AlertContainer'
 
 type Props = {
   word: string
@@ -196,7 +197,7 @@ export function Game({ word, maxAttempts }: Props) {
         isRevealing={isRevealing}
         currentRowClassName={currentRowClass}
         maxRows={maxAttempts}
-        columns={word.length}
+        word={word}
       />
       <Bar
         onDelete={onDelete}
@@ -212,6 +213,8 @@ export function Game({ word, maxAttempts }: Props) {
         guesses={guesses}
         isRevealing={isRevealing}
       />
+
+      <AlertContainer />
     </div>
   )
 }

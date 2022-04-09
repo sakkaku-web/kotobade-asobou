@@ -9,7 +9,7 @@ type Props = {
   isRevealing?: boolean
   currentRowClassName: string
   maxRows?: number
-  columns?: number
+  word?: string
 }
 
 export const Grid = ({
@@ -18,10 +18,10 @@ export const Grid = ({
   isRevealing,
   currentRowClassName,
   maxRows,
-  columns,
+  word
 }: Props) => {
   const rows = maxRows || MAX_CHALLENGES
-  const cols = columns || MAX_WORD_LENGTH
+  const cols = word?.length || MAX_WORD_LENGTH
 
   const empties =
     guesses.length < rows - 1
@@ -36,6 +36,7 @@ export const Grid = ({
             key={i}
             guess={guess}
             isRevealing={isRevealing && guesses.length - 1 === i}
+            word={word}
           />
         ))}
         {guesses.length < rows && (

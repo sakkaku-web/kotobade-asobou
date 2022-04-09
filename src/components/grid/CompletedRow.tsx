@@ -6,10 +6,11 @@ import { JISHO_SEARCH_LINK } from '../../constants/strings'
 type Props = {
   guess: string
   isRevealing?: boolean
+  word?: string
 }
 
-export const CompletedRow = ({ guess, isRevealing }: Props) => {
-  const statuses = getGuessStatuses(guess)
+export const CompletedRow = ({ guess, isRevealing, word }: Props) => {
+  const statuses = getGuessStatuses(guess, word)
   const splitGuess = unicodeSplit(guess)
 
   return (
