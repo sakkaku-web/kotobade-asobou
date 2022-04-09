@@ -10,7 +10,7 @@ import {
 } from '../lib/localStorage'
 import { Bar } from '../components/keyboard/Bar'
 import { Keyboard } from '../components/keyboard/Keyboard'
-import { unicodeLength } from '../lib/words'
+import { findFirstUnusedReveal, unicodeLength } from '../lib/words'
 import GraphemeSplitter from 'grapheme-splitter'
 import { toHiragana } from '@koozaki/romaji-conv'
 import { REVEAL_TIME_MS } from '../constants/settings'
@@ -19,9 +19,13 @@ import { AlertContainer } from '../components/alerts/AlertContainer'
 type Props = {
   word: string
   maxAttempts: number
+  hardMode?: boolean
+  onWin?: () => void
+  onLose?: () => void
 }
 
-export function Game({ word, maxAttempts }: Props) {
+export function Game({ word, maxAttempts, hardMode, onWin, onLose }: Props) {
+  const isHardMode = hardMode || false
   const { showError: showErrorAlert, showSuccess: showSuccessAlert } =
     useAlert()
 
@@ -39,16 +43,6 @@ export function Game({ word, maxAttempts }: Props) {
       removeShareStatusFromLocalStorage()
       return []
     }
-    const gameWasWon = loaded.guesses.includes(word)
-    if (gameWasWon) {
-      setIsGameWon(true)
-    }
-    if (loaded.guesses.length === maxAttempts && !gameWasWon) {
-      setIsGameLost(true)
-      showErrorAlert(t('CORRECT_WORD_MESSAGE', `1`, word), {
-        persist: true,
-      })
-    }
     return loaded.guesses
   })
 
@@ -65,15 +59,12 @@ export function Game({ word, maxAttempts }: Props) {
 
     if (isGameWon) {
       const winMessage = WIN_MESSAGES.ja[guesses.length - 1]
-
-      showSuccessAlert(winMessage, {
-        delayMs,
-        // onClose: () => setIsStatsModalOpen(true),
-      })
+      showSuccessAlert(winMessage, { delayMs, onClose: onWin })
     }
 
     if (isGameLost) {
-      showErrorAlert('残念', { delayMs })
+      const loseMessage = '残念'
+      showErrorAlert(loseMessage, { delayMs, onClose: onLose })
     }
   }, [isGameWon, isGameLost, guesses, showSuccessAlert, showErrorAlert, word])
 
@@ -124,16 +115,14 @@ export function Game({ word, maxAttempts }: Props) {
       return
     }
 
-    if (!(unicodeLength(currentInputTextInHiragana) === word.length)) {
-      return showErrorAlert(
-        t('NOT_ENOUGH_LETTERS_MESSAGE', currentInputTextInHiragana)
-      )
-    }
-
     if (!(unicodeLength(currentGuessInHiragana) === word.length)) {
       setCurrentRowClass('jiggle')
       return showErrorAlert(
-        t('NOT_ENOUGH_LETTERS_MESSAGE', currentGuessInHiragana),
+        t(
+          'NOT_ENOUGH_LETTERS_MESSAGE',
+          currentGuessInHiragana,
+          `${word.length}`
+        ),
         {
           onClose: clearCurrentRowClass,
         }
@@ -141,18 +130,19 @@ export function Game({ word, maxAttempts }: Props) {
     }
 
     // enforce hard mode - all guesses must contain all previously revealed letters
-    // if (isHardMode) {
-    //   const firstMissingReveal = findFirstUnusedReveal(
-    //     currentGuessInHiragana,
-    //     guesses
-    //   )
-    //   if (firstMissingReveal) {
-    //     setCurrentRowClass('jiggle')
-    //     return showErrorAlert(firstMissingReveal, {
-    //       onClose: clearCurrentRowClass,
-    //     })
-    //   }
-    // }
+    if (isHardMode) {
+      const firstMissingReveal = findFirstUnusedReveal(
+        currentGuessInHiragana,
+        guesses,
+        word
+      )
+      if (firstMissingReveal) {
+        setCurrentRowClass('jiggle')
+        return showErrorAlert(firstMissingReveal, {
+          onClose: clearCurrentRowClass,
+        })
+      }
+    }
 
     setIsRevealing(true)
     // turn this back off after all
@@ -161,7 +151,7 @@ export function Game({ word, maxAttempts }: Props) {
       setIsRevealing(false)
     }, REVEAL_TIME_MS * word.length)
 
-    const winningWord = currentGuessInHiragana === word // isWinningWord(currentGuessInHiragana)
+    const winningWord = currentGuessInHiragana === word
 
     if (
       unicodeLength(currentGuessInHiragana) === word.length &&
@@ -171,15 +161,12 @@ export function Game({ word, maxAttempts }: Props) {
       setGuesses([...guesses, currentGuessInHiragana])
       setCurrentGuess('')
       setCurrentInputText('')
-      //   saveShareStatusToLocalStorage(isHintMode, isHardMode)
 
       if (winningWord) {
-        // setStats(addStatsForCompletedGame(stats, guesses.length))
         return setIsGameWon(true)
       }
 
       if (guesses.length === maxAttempts - 1) {
-        // setStats(addStatsForCompletedGame(stats, guesses.length + 1))
         setIsGameLost(true)
         showErrorAlert(t('CORRECT_WORD_MESSAGE', `1`, word), {
           persist: true,

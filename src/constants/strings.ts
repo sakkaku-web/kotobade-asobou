@@ -19,8 +19,8 @@ interface TranslationType {
 export const t = (index: string, text1: string = '', text2: string = '') => {
   const displayLanguage = getStoredDisplayLanguage()
   let translationText = (displayLanguage === PREFERRED_DISPLAY_LANGUAGE ? ja[index] : en[index])
-  if (text1 !== '') translationText = translationText.replace('$text1', text1)
-  if (text2 !== '') translationText = translationText.replace('$text2', text2)
+  if (text1 !== '') translationText = translationText.replaceAll('$text1', text1)
+  if (text2 !== '') translationText = translationText.replaceAll('$text2', text2)
   return translationText
 }
 
@@ -121,7 +121,7 @@ ja['can you treat me'] = 'コーヒーをおごって'
 ja['please?'] = 'いただけますか？'
 
 ja['GAME_COPIED_MESSAGE'] = '成績をクリップボードにコピーしました'
-ja['NOT_ENOUGH_LETTERS_MESSAGE'] = '「$text1」は ' + MAX_WORD_LENGTH + '文字の単語ではありません。' + MAX_WORD_LENGTH + '文字入力してください。'
+ja['NOT_ENOUGH_LETTERS_MESSAGE'] = '「$text1」は $text2文字の単語ではありません。$text2文字入力してください。'
 ja['WORD_NOT_FOUND_MESSAGE'] = 'この答えは単語リストにありません'
 ja['TIMEZONE_ALERT_MESSAGE'] = 'タイムゾーンをゲーム開始時にのみ設定することができます'
 ja['HINT_MODE_ALERT_MESSAGE'] = 'ヒントモードは、ゲーム開始時と終了時にのみオフにすることができます'

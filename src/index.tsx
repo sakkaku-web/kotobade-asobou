@@ -1,16 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import App from './App'
 import reportWebVitals from './reportWebVitals'
-import { AlertProvider } from './context/AlertContext'
-import { Game } from './game-components/Game'
+import { JapaneseWordle } from './game-components/JapaneseWordle'
 
 ReactDOM.render(
   <React.StrictMode>
-    <AlertProvider>
-      <Game word="おおああええ" maxAttempts={5} />
-    </AlertProvider>
+    <JapaneseWordle word="test" maxAttempts={10} />
   </React.StrictMode>,
   document.getElementById('root')
 )
