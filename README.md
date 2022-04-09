@@ -1,8 +1,20 @@
 # Kotobade Asobou 言葉で遊ぼう
 
+This is a modified version of https://github.com/taximanli/kotobade-asobou.
+Mainly to be used in https://github.com/sakkaku-web/daily-japanese
+
+It includes the following changes:
+
+- A word of any length can be used
+- It doesn't check for valid guesses
+- It only includes the board and the keyboard
+- It is designed to be a reuseable component
+
+---
+
 This is the Japanese version of the word guessing game we all know and love. This game was forked from this [open source version](https://github.com/cwackerfuss/react-wordle) and has undergone massive redevelopment with extra game mode and new elements added to accommodate the unique features of the Japanese language.
 
-If you enjoy the game and would like to support my work, please consider [buying me a coffee](https://ko-fi.com/taximanli)  ♥️
+If you enjoy the game and would like to support my work, please consider [buying me a coffee](https://ko-fi.com/taximanli) ♥️
 
 これは、有名で人気な単語パズルゲームの 日本語版 です。このゲームは、この [オープンソース版](https://github.com/cwackerfuss/react-wordle) からフォークして大規模なソフトウェア再開発を経ています。また、日本語の特徴に合わせて、新しいモードと要素が追加されています。
 
@@ -21,7 +33,7 @@ A new word will be available each day!
 
 ## 遊び方
 
-今日の単語を12回以内に当ててください。それぞれの答えはひらがな4文字の単語である必要があります。入力ボタンを押して答えを決定してください。 答えるたびに正方形の色が変わり、それが次のヒントになります。
+今日の単語を 12 回以内に当ててください。それぞれの答えはひらがな 4 文字の単語である必要があります。入力ボタンを押して答えを決定してください。 答えるたびに正方形の色が変わり、それが次のヒントになります。
 
 ### 単語リストについて
 
