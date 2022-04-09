@@ -1,5 +1,5 @@
 {
-  "name": "kotobade-asobou",
+  "name": "@sakkaku-web/kotobade-asobou",
   "version": "2.3.10",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
