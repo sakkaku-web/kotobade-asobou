@@ -1,16 +1,16 @@
-import { MAX_CHALLENGES, MAX_WORD_LENGTH } from '../../constants/settings'
-import { CompletedRow } from './CompletedRow'
-import { CurrentRow } from './CurrentRow'
-import { EmptyRow } from './EmptyRow'
+import { MAX_CHALLENGES, MAX_WORD_LENGTH } from '../../constants/settings';
+import { CompletedRow } from './CompletedRow';
+import { CurrentRow } from './CurrentRow';
+import { EmptyRow } from './EmptyRow';
 
 type Props = {
-  guesses: string[]
-  currentGuess: string
-  isRevealing?: boolean
-  currentRowClassName: string
-  maxRows?: number
-  word?: string
-}
+  guesses: string[];
+  currentGuess: string;
+  isRevealing?: boolean;
+  currentRowClassName: string;
+  maxRows?: number;
+  word?: string;
+};
 
 export const Grid = ({
   guesses,
@@ -18,15 +18,15 @@ export const Grid = ({
   isRevealing,
   currentRowClassName,
   maxRows,
-  word
+  word,
 }: Props) => {
-  const rows = maxRows || MAX_CHALLENGES
-  const cols = word?.length || MAX_WORD_LENGTH
+  const rows = maxRows || MAX_CHALLENGES;
+  const cols = word?.length || MAX_WORD_LENGTH;
 
   const empties =
     guesses.length < rows - 1
       ? Array.from(Array(rows - 1 - guesses.length))
-      : []
+      : [];
 
   return (
     <div className="flex justify-center pb-1 md:pb-2">
@@ -51,5 +51,5 @@ export const Grid = ({
         ))}
       </div>
     </div>
-  )
-}
+  );
+};

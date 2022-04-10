@@ -3,15 +3,15 @@ import {
   DotsVerticalIcon,
   QuestionMarkCircleIcon,
   HeartIcon,
-} from '@heroicons/react/outline'
-import { GAME_TITLE } from '../../constants/strings'
+} from '@heroicons/react/outline';
+import { GAME_TITLE } from '../../constants/strings';
 
 type Props = {
-  setIsInfoModalOpen: (value: boolean) => void
-  setIsSupportModalOpen: (value: boolean) => void
-  setIsStatsModalOpen: (value: boolean) => void
-  setIsSettingsModalOpen: (value: boolean) => void
-}
+  setIsInfoModalOpen: (value: boolean) => void;
+  setIsSupportModalOpen: (value: boolean) => void;
+  setIsStatsModalOpen: (value: boolean) => void;
+  setIsSettingsModalOpen: (value: boolean) => void;
+};
 
 export const Navbar = ({
   setIsInfoModalOpen,
@@ -19,8 +19,8 @@ export const Navbar = ({
   setIsStatsModalOpen,
   setIsSettingsModalOpen,
 }: Props) => {
-  const gameHeading = GAME_TITLE.split(' ')
-  
+  const gameHeading = GAME_TITLE.split(' ');
+
   return (
     <div className="flex max-w-lg mx-auto items-center mb-2 md:mb-3 mt-0 md:mt-3">
       <h1 className="hidden">{GAME_TITLE}</h1>
@@ -59,5 +59,5 @@ export const Navbar = ({
         onClick={() => setIsSettingsModalOpen(true)}
       />
     </div>
-  )
-}
+  );
+};

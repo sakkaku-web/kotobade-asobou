@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react'
-import { ITimezone } from 'react-timezone-select'
-import { toHiragana } from '@koozaki/romaji-conv'
-import { Grid } from './components/grid/Grid'
-import { Bar } from './components/keyboard/Bar'
-import { Keyboard } from './components/keyboard/Keyboard'
-import { InfoModal } from './components/modals/InfoModal'
-import { SupportModal } from './components/modals/SupportModal'
-import { StatsModal } from './components/modals/StatsModal'
-import { SettingsModal } from './components/modals/SettingsModal'
-import { t, WIN_MESSAGES } from './constants/strings'
+import { useState, useEffect } from 'react';
+import { ITimezone } from 'react-timezone-select';
+import { toHiragana } from '@koozaki/romaji-conv';
+import { Grid } from './components/grid/Grid';
+import { Bar } from './components/keyboard/Bar';
+import { Keyboard } from './components/keyboard/Keyboard';
+import { InfoModal } from './components/modals/InfoModal';
+import { SupportModal } from './components/modals/SupportModal';
+import { StatsModal } from './components/modals/StatsModal';
+import { SettingsModal } from './components/modals/SettingsModal';
+import { t, WIN_MESSAGES } from './constants/strings';
 import {
   MAX_WORD_LENGTH,
   MAX_CHALLENGES,
@@ -16,7 +16,7 @@ import {
   GAME_LOST_INFO_DELAY,
   WELCOME_INFO_MODAL_MS,
   PREFERRED_DISPLAY_LANGUAGE,
-} from './constants/settings'
+} from './constants/settings';
 import {
   isWordInWordList,
   isWinningWord,
@@ -25,8 +25,8 @@ import {
   findFirstUnusedReveal,
   unicodeLength,
   setWordOfDay,
-} from './lib/words'
-import { addStatsForCompletedGame, loadStats } from './lib/stats'
+} from './lib/words';
+import { addStatsForCompletedGame, loadStats } from './lib/stats';
 import {
   saveShareStatusToLocalStorage,
   removeShareStatusFromLocalStorage,
@@ -40,77 +40,77 @@ import {
   getStoredDisplayLanguage,
   getStoredTimezone,
   setStoredTimezone,
-} from './lib/localStorage'
-import { default as GraphemeSplitter } from 'grapheme-splitter'
+} from './lib/localStorage';
+import { default as GraphemeSplitter } from 'grapheme-splitter';
 
-import './App.css'
-import { AlertContainer } from './components/alerts/AlertContainer'
-import { useAlert } from './context/AlertContext'
-import { Navbar } from './components/navbar/Navbar'
+import './App.css';
+import { AlertContainer } from './components/alerts/AlertContainer';
+import { useAlert } from './context/AlertContext';
+import { Navbar } from './components/navbar/Navbar';
 
 function App() {
   const prefersDarkMode = window.matchMedia(
     '(prefers-color-scheme: dark)'
-  ).matches
+  ).matches;
 
   const { showError: showErrorAlert, showSuccess: showSuccessAlert } =
-    useAlert()
-  const [currentGuess, setCurrentGuess] = useState('')
-  const [currentInputText, setCurrentInputText] = useState('')
-  const [isGameWon, setIsGameWon] = useState(false)
-  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
-  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false)
-  const [isStatsModalOpen, setIsStatsModalOpen] = useState(false)
-  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
-  const [currentRowClass, setCurrentRowClass] = useState('')
-  const [isGameLost, setIsGameLost] = useState(false)
+    useAlert();
+  const [currentGuess, setCurrentGuess] = useState('');
+  const [currentInputText, setCurrentInputText] = useState('');
+  const [isGameWon, setIsGameWon] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+  const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [currentRowClass, setCurrentRowClass] = useState('');
+  const [isGameLost, setIsGameLost] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem('theme')
       ? localStorage.getItem('theme') === 'dark'
       : prefersDarkMode
       ? true
       : false
-  )
+  );
   const [isHighContrastMode, setIsHighContrastMode] = useState(
     getStoredIsHighContrastMode()
-  )
+  );
   const [displayLanguage, setDisplayLanguage] = useState(
     getStoredDisplayLanguage()
-  )
-  const [isRevealing, setIsRevealing] = useState(false)
+  );
+  const [isRevealing, setIsRevealing] = useState(false);
   const [guesses, setGuesses] = useState<string[]>(() => {
-    const loaded = loadGameStateFromLocalStorage()
+    const loaded = loadGameStateFromLocalStorage();
     if (loaded?.solution !== solution) {
-      removeShareStatusFromLocalStorage()
-      return []
+      removeShareStatusFromLocalStorage();
+      return [];
     }
-    const gameWasWon = loaded.guesses.includes(solution)
+    const gameWasWon = loaded.guesses.includes(solution);
     if (gameWasWon) {
-      setIsGameWon(true)
+      setIsGameWon(true);
     }
     if (loaded.guesses.length === MAX_CHALLENGES && !gameWasWon) {
-      setIsGameLost(true)
+      setIsGameLost(true);
       showErrorAlert(
         t('CORRECT_WORD_MESSAGE', solutionIndex.toString(), solution),
         {
           persist: true,
         }
-      )
+      );
     }
-    return loaded.guesses
-  })
+    return loaded.guesses;
+  });
 
-  const [stats, setStats] = useState(() => loadStats())
+  const [stats, setStats] = useState(() => loadStats());
 
-  const [timezone, setTimezone] = useState(getStoredTimezone())
+  const [timezone, setTimezone] = useState(getStoredTimezone());
 
-  const [isHintMode, setIsHintMode] = useState(getStoredIsHintMode())
+  const [isHintMode, setIsHintMode] = useState(getStoredIsHintMode());
 
   const [isHardMode, setIsHardMode] = useState(
     localStorage.getItem('gameMode')
       ? localStorage.getItem('gameMode') === 'hard'
       : false
-  )
+  );
 
   useEffect(() => {
     // if no game state on load,
@@ -118,41 +118,41 @@ function App() {
     //if (!loadGameStateFromLocalStorage()) {
     if (!(isGameWon || isGameLost)) {
       setTimeout(() => {
-        setIsInfoModalOpen(true)
-      }, WELCOME_INFO_MODAL_MS)
+        setIsInfoModalOpen(true);
+      }, WELCOME_INFO_MODAL_MS);
     }
     //}
-  }, [isGameWon, isGameLost])
+  }, [isGameWon, isGameLost]);
 
   useEffect(() => {
     if (isDarkMode) {
-      document.documentElement.classList.add('dark')
+      document.documentElement.classList.add('dark');
     } else {
-      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.remove('dark');
     }
 
     if (isHighContrastMode) {
-      document.documentElement.classList.add('high-contrast')
+      document.documentElement.classList.add('high-contrast');
     } else {
-      document.documentElement.classList.remove('high-contrast')
+      document.documentElement.classList.remove('high-contrast');
     }
-  }, [isDarkMode, isHighContrastMode])
+  }, [isDarkMode, isHighContrastMode]);
 
   const handleTimezone = (timezone: ITimezone) => {
     if (guesses.length === 0) {
-      timezone = typeof timezone === 'string' ? timezone : timezone.value
-      setTimezone(timezone)
-      setStoredTimezone(timezone)
-      setWordOfDay()
+      timezone = typeof timezone === 'string' ? timezone : timezone.value;
+      setTimezone(timezone);
+      setStoredTimezone(timezone);
+      setWordOfDay();
     } else {
-      showErrorAlert(t('TIMEZONE_ALERT_MESSAGE'))
+      showErrorAlert(t('TIMEZONE_ALERT_MESSAGE'));
     }
-  }
+  };
 
   const handleDarkMode = (isDark: boolean) => {
-    setIsDarkMode(isDark)
-    localStorage.setItem('theme', isDark ? 'dark' : 'light')
-  }
+    setIsDarkMode(isDark);
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  };
 
   const handleHintMode = (isHint: boolean) => {
     if (
@@ -161,12 +161,12 @@ function App() {
       isGameLost ||
       !getStoredIsHintMode()
     ) {
-      setIsHintMode(isHint)
-      setStoredIsHintMode(isHint)
+      setIsHintMode(isHint);
+      setStoredIsHintMode(isHint);
     } else {
-      showErrorAlert(t('HINT_MODE_ALERT_MESSAGE'))
+      showErrorAlert(t('HINT_MODE_ALERT_MESSAGE'));
     }
-  }
+  };
 
   const handleHardMode = (isHard: boolean) => {
     if (
@@ -175,51 +175,51 @@ function App() {
       isGameLost ||
       localStorage.getItem('gameMode') === 'hard'
     ) {
-      setIsHardMode(isHard)
-      localStorage.setItem('gameMode', isHard ? 'hard' : 'normal')
+      setIsHardMode(isHard);
+      localStorage.setItem('gameMode', isHard ? 'hard' : 'normal');
     } else {
-      showErrorAlert(t('HARD_MODE_ALERT_MESSAGE'))
+      showErrorAlert(t('HARD_MODE_ALERT_MESSAGE'));
     }
-  }
+  };
 
   const handleHighContrastMode = (isHighContrast: boolean) => {
-    setIsHighContrastMode(isHighContrast)
-    setStoredIsHighContrastMode(isHighContrast)
-  }
+    setIsHighContrastMode(isHighContrast);
+    setStoredIsHighContrastMode(isHighContrast);
+  };
 
   const handleDisplayLanguage = (displayLanguage: string) => {
-    setDisplayLanguage(displayLanguage)
-    setStoredDisplayLanguage(displayLanguage)
-  }
+    setDisplayLanguage(displayLanguage);
+    setStoredDisplayLanguage(displayLanguage);
+  };
 
   const clearCurrentRowClass = () => {
-    setCurrentRowClass('')
-  }
+    setCurrentRowClass('');
+  };
 
   useEffect(() => {
-    saveGameStateToLocalStorage({ guesses, solution })
-  }, [guesses])
+    saveGameStateToLocalStorage({ guesses, solution });
+  }, [guesses]);
 
   useEffect(() => {
     if (isGameWon) {
       const winMessage =
         displayLanguage === PREFERRED_DISPLAY_LANGUAGE
           ? WIN_MESSAGES.ja[guesses.length - 1]
-          : WIN_MESSAGES.en[guesses.length - 1]
-      const delayMs = REVEAL_TIME_MS * MAX_WORD_LENGTH
+          : WIN_MESSAGES.en[guesses.length - 1];
+      const delayMs = REVEAL_TIME_MS * MAX_WORD_LENGTH;
 
       showSuccessAlert(winMessage, {
         delayMs,
         onClose: () => setIsStatsModalOpen(true),
-      })
+      });
     }
 
     if (isGameLost) {
       setTimeout(() => {
-        setIsStatsModalOpen(true)
-      }, GAME_LOST_INFO_DELAY)
+        setIsStatsModalOpen(true);
+      }, GAME_LOST_INFO_DELAY);
     }
-  }, [isGameWon, isGameLost, guesses, displayLanguage, showSuccessAlert])
+  }, [isGameWon, isGameLost, guesses, displayLanguage, showSuccessAlert]);
 
   const onChar = (value: string) => {
     if (
@@ -227,10 +227,10 @@ function App() {
       guesses.length < MAX_CHALLENGES &&
       !isGameWon
     ) {
-      setCurrentGuess(`${currentGuess}${value}`)
-      setCurrentInputText(`${currentInputText}${value}`)
+      setCurrentGuess(`${currentGuess}${value}`);
+      setCurrentInputText(`${currentInputText}${value}`);
     }
-  }
+  };
 
   const onDelete = () => {
     if (currentGuess === currentInputText) {
@@ -239,56 +239,56 @@ function App() {
           .splitGraphemes(currentGuess)
           .slice(0, -1)
           .join('')
-      )
+      );
     }
     setCurrentInputText(
       new GraphemeSplitter()
         .splitGraphemes(currentInputText)
         .slice(0, -1)
         .join('')
-    )
-  }
+    );
+  };
 
   const onEnter = () => {
     // convert romaji or katakana input to hiragana
-    let currentInputTextInHiragana = toHiragana(currentInputText)
+    let currentInputTextInHiragana = toHiragana(currentInputText);
     let currentGuessInHiragana = new GraphemeSplitter()
       .splitGraphemes(currentInputTextInHiragana)
       .slice(0, MAX_WORD_LENGTH)
-      .join('')
+      .join('');
 
-    setCurrentGuess(currentGuessInHiragana)
-    setCurrentInputText(currentInputTextInHiragana)
+    setCurrentGuess(currentGuessInHiragana);
+    setCurrentInputText(currentInputTextInHiragana);
 
     if (isGameWon || isGameLost) {
-      return
+      return;
     }
 
     if (currentInputTextInHiragana === '' || currentGuessInHiragana === '') {
-      return
+      return;
     }
 
     if (!(unicodeLength(currentInputTextInHiragana) === MAX_WORD_LENGTH)) {
       return showErrorAlert(
         t('NOT_ENOUGH_LETTERS_MESSAGE', currentInputTextInHiragana)
-      )
+      );
     }
 
     if (!(unicodeLength(currentGuessInHiragana) === MAX_WORD_LENGTH)) {
-      setCurrentRowClass('jiggle')
+      setCurrentRowClass('jiggle');
       return showErrorAlert(
         t('NOT_ENOUGH_LETTERS_MESSAGE', currentGuessInHiragana),
         {
           onClose: clearCurrentRowClass,
         }
-      )
+      );
     }
 
     if (!isWordInWordList(currentGuessInHiragana)) {
-      setCurrentRowClass('jiggle')
+      setCurrentRowClass('jiggle');
       return showErrorAlert(t('WORD_NOT_FOUND_MESSAGE'), {
         onClose: clearCurrentRowClass,
-      })
+      });
     }
 
     // enforce hard mode - all guesses must contain all previously revealed letters
@@ -296,52 +296,52 @@ function App() {
       const firstMissingReveal = findFirstUnusedReveal(
         currentGuessInHiragana,
         guesses
-      )
+      );
       if (firstMissingReveal) {
-        setCurrentRowClass('jiggle')
+        setCurrentRowClass('jiggle');
         return showErrorAlert(firstMissingReveal, {
           onClose: clearCurrentRowClass,
-        })
+        });
       }
     }
 
-    setIsRevealing(true)
+    setIsRevealing(true);
     // turn this back off after all
     // chars have been revealed
     setTimeout(() => {
-      setIsRevealing(false)
-    }, REVEAL_TIME_MS * MAX_WORD_LENGTH)
+      setIsRevealing(false);
+    }, REVEAL_TIME_MS * MAX_WORD_LENGTH);
 
-    const winningWord = isWinningWord(currentGuessInHiragana)
+    const winningWord = isWinningWord(currentGuessInHiragana);
 
     if (
       unicodeLength(currentGuessInHiragana) === MAX_WORD_LENGTH &&
       guesses.length < MAX_CHALLENGES &&
       !isGameWon
     ) {
-      setGuesses([...guesses, currentGuessInHiragana])
-      setCurrentGuess('')
-      setCurrentInputText('')
-      saveShareStatusToLocalStorage(isHintMode, isHardMode)
+      setGuesses([...guesses, currentGuessInHiragana]);
+      setCurrentGuess('');
+      setCurrentInputText('');
+      saveShareStatusToLocalStorage(isHintMode, isHardMode);
 
       if (winningWord) {
-        setStats(addStatsForCompletedGame(stats, guesses.length))
-        return setIsGameWon(true)
+        setStats(addStatsForCompletedGame(stats, guesses.length));
+        return setIsGameWon(true);
       }
 
       if (guesses.length === MAX_CHALLENGES - 1) {
-        setStats(addStatsForCompletedGame(stats, guesses.length + 1))
-        setIsGameLost(true)
+        setStats(addStatsForCompletedGame(stats, guesses.length + 1));
+        setIsGameLost(true);
         showErrorAlert(
           t('CORRECT_WORD_MESSAGE', solutionIndex.toString(), solution),
           {
             persist: true,
             delayMs: REVEAL_TIME_MS * MAX_WORD_LENGTH + 1,
           }
-        )
+        );
       }
     }
-  }
+  };
 
   return (
     <div className="pt-2 pb-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -414,7 +414,7 @@ function App() {
 
       <AlertContainer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

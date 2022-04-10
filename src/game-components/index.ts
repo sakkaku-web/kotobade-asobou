@@ -1,1 +1,1 @@
-export * from './JapaneseWordle'
+export * from './JapaneseWordle';

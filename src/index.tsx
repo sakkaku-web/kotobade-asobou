@@ -1,8 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import './index.css'
-import reportWebVitals from './reportWebVitals'
-import { JapaneseWordle } from './game-components/JapaneseWordle'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+import { JapaneseWordle } from './game-components/JapaneseWordle';
 
 // ReactDOM.render(
 //   <React.StrictMode>
@@ -16,4 +16,4 @@ import { JapaneseWordle } from './game-components/JapaneseWordle'
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 // reportWebVitals()
 
-export * from './game-components'
+export * from './game-components';

@@ -1,11 +1,11 @@
-import { Cell } from './Cell'
+import { Cell } from './Cell';
 
 type Props = {
-  columns: number
-}
+  columns: number;
+};
 
 export const EmptyRow = ({ columns }: Props) => {
-  const emptyCells = Array.from(Array(columns))
+  const emptyCells = Array.from(Array(columns));
 
   return (
     <div className="flex justify-center mb-1 mx-1">
@@ -13,5 +13,5 @@ export const EmptyRow = ({ columns }: Props) => {
         <Cell key={i} />
       ))}
     </div>
-  )
-}
+  );
+};
